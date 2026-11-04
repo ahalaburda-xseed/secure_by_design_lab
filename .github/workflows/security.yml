@@ -20,9 +20,11 @@ jobs:
             ghcr.io/gitleaks/gitleaks:latest dir /scan --no-banner -v
 
       - name: SAST — semgrep
+        if: always()
         run: pipx run semgrep scan --config p/owasp-top-ten --config p/python --error .
 
       - name: Dependencies + Dockerfile — trivy
+        if: always()
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           scan-type: fs
