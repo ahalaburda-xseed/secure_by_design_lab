@@ -1,0 +1,36 @@
+name: security
+on: [pull_request, workflow_dispatch]
+
+# Least privilege: the scan job only needs to read the code.
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      # Actions pinned by full SHA, not @v4 — a tag can be moved, a SHA cannot.
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: Secrets — gitleaks
+        run: |
+          docker run --rm -v "${{ github.workspace }}:/scan" \
+            ghcr.io/gitleaks/gitleaks:latest dir /scan --no-banner -v
+
+      - name: SAST — semgrep
+        run: pipx run semgrep scan --config p/owasp-top-ten --config p/python --error .
+
+      - name: Dependencies + Dockerfile — trivy
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          scan-type: fs
+          scanners: vuln,misconfig
+          exit-code: "1"
+          severity: HIGH,CRITICAL
+          skip-dirs: demo_b
+
+      - name: IaC — checkov
+        if: always()
+        run: pipx run checkov -d infra/ --compact --quiet

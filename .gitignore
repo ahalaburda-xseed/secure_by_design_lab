@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.venv/
+*.db
+
+# NOTE: .env is deliberately NOT ignored here. Demo A commits a fake secret live
+# to show gitleaks blocking it. In a real project, .env belongs in .gitignore.

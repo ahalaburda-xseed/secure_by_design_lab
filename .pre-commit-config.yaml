@@ -1,0 +1,12 @@
+# Blocks secrets before they ever leave your laptop. ~200 ms per commit.
+#   brew install pre-commit gitleaks
+#   pre-commit install
+# Uses the locally installed gitleaks binary (no Go build needed).
+repos:
+  - repo: local
+    hooks:
+      - id: gitleaks
+        name: gitleaks (secret scan of staged changes)
+        entry: gitleaks protect --staged --redact -v
+        language: system
+        pass_filenames: false
