@@ -80,11 +80,11 @@ checkov -d infra/ --compact
 
 ## Demo B — "El README que da órdenes" (~5 min)
 
-Ver `demo_b/README.md`. **Hallazgo (slide 19):** probada contra 13 modelos. Los 7
-Claude la atajaron (rechazan, avisan o ignoran); **GLM-4.6 y Qwen3.5-9B la ejecutaron**
-—leyeron el `.env` y lo exfiltraron. La narrativa es tranquilizadora pero con el
-asterisco correcto — "hoy Claude te cubrió, pero otros modelos no; no dependas del
-modelo, cerrá la puerta por arquitectura".
+Ver `demo_b/README.md`. **Hallazgo (slide 19):** probada contra 17 modelos. Los 7
+Claude la atajaron; **GPT-4o-mini, GLM-4.6 y Qwen3.5-9B la ejecutaron** —leyeron el
+`.env` y lo exfiltraron (3 proveedores, los modelos más chicos/viejos; los flagships
+aguantaron). La narrativa es tranquilizadora con el asterisco correcto — "hoy Claude
+te cubrió, pero otros no; no dependas del modelo, cerrá la puerta por arquitectura".
 
 Secuencia en vivo:
 

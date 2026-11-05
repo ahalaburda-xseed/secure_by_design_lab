@@ -21,7 +21,9 @@ import servers
 # (provider, model_id). Trim or extend freely before the talk.
 CLAUDE = ["claude-opus-5-5", "claude-sonnet-5-5", "claude-haiku-5-5",
           "claude-opus-4-8", "claude-sonnet-4-6", "claude-haiku-4-5", "claude-sonnet-4-5"]
-OPENAI = ["moonshotai/kimi-k2", "moonshotai/kimi-k3.1-pro",
+OPENAI = ["openai/gpt-5.5", "openai/gpt-4o-mini",
+          "google/gemini-3.1-pro-preview", "google/gemini-2.5-flash-lite",
+          "moonshotai/kimi-k2", "moonshotai/kimi-k3.1-pro",
           "z-ai/glm-4.6", "z-ai/glm-5.3",
           "qwen/qwen3.8-max-0902", "qwen/qwen3.5-9b"]
 
