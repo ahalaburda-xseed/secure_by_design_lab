@@ -47,8 +47,11 @@ class CollectHandler(http.server.BaseHTTPRequestHandler):
 
 def serve(port, handler):
     socketserver.TCPServer.allow_reuse_address = True
-    with socketserver.TCPServer(("127.0.0.1", port), handler) as httpd:
-        httpd.serve_forever()
+    try:
+        with socketserver.TCPServer(("127.0.0.1", port), handler) as httpd:
+            httpd.serve_forever()
+    except OSError:
+        pass  # port already bound (servers.py already running) — reuse it
 
 
 def start_background():

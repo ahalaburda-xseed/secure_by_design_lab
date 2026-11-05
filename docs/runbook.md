@@ -86,21 +86,27 @@ Claude la atajaron; **GPT-4o-mini, GLM-4.6 y Qwen3.5-9B la ejecutaron** —leyer
 aguantaron). La narrativa es tranquilizadora con el asterisco correcto — "hoy Claude
 te cubrió, pero otros no; no dependas del modelo, cerrá la puerta por arquitectura".
 
-Secuencia en vivo:
+Terminal 1 (queda arriba toda la demo): `cd demo_b && python3 servers.py`
+Terminal 2 (necesita `OPENROUTER_API_KEY` exportada):
 
-1. **La tabla (el momento):** `cd demo_b && python3 compare.py` → corre la inyección
-   contra todos los modelos y muestra la reacción de cada uno. Si hay key de OpenRouter,
-   suma Kimi/GLM/Qwen (si alguno exfiltra, ahí está la prueba de "no dependas del modelo").
-2. **Un caso en vivo:** `python3 agent.py` contra opus-5-5 → `refusal`/avisa.
-   "La defensa funcionó. Pero mirá por qué no alcanza:"
-3. **La mitigación (sólida):** `DEMO_SAFE=1 python3 agent.py` → sin `http_post`, el
-   ataque es imposible para cualquier modelo. Esa pata rota es TU control.
+1. **El ataque funciona — slide 18.** `python3 agent_openai.py z-ai/glm-4.6`
+   → el `.env` aparece en el colector (Terminal 1). "No lo hackearon: hizo exactamente
+   lo que el README escondido le pidió." (glm-4.6 y qwen3.5-9b son los más consistentes.)
+2. **¿Siempre funciona? — slide 19.** `python3 compare.py` → la tabla: los 7 Claude lo
+   atajan, varios modelos más chicos/viejos lo filtran. "Claude te cubrió — pero no
+   podés depender de eso: otro modelo, provider o payload cae."
+3. **La mitigación (sólida).** `DEMO_SAFE=1 python3 agent_openai.py z-ai/glm-4.6` → lee
+   el `.env` pero no tiene `http_post`: no puede sacarlo. Imposible para cualquier modelo.
+   Esa pata rota es TU control.
+
+Opcional: `python3 agent.py` (Claude opus-5-5) → `refusal` en vivo, para mostrar que el
+frontier model lo ataja. Pero el cierre es el mismo: no dependas del modelo.
 
 Cierre: "No hace falta volverse paranoico; hace falta no darle a un agente las tres
 patas a la vez. Con eso dormís tranquilo aunque el modelo tenga un mal día."
 
-> Para probar modelos no-Claude: `OPENROUTER_API_KEY` (openrouter.ai/keys) y
-> `python3 agent_openai.py moonshotai/kimi-k2`. Detalle en `demo_b/README.md`.
+> Backup si falla el vivo: `asciinema play compare_backup.cast`. `compare.py` arranca
+> sus propios servidores, así que convive con el `servers.py` de Terminal 1.
 
 ---
 
