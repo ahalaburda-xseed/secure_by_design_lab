@@ -80,10 +80,11 @@ checkov -d infra/ --compact
 
 ## Demo B — "El README que da órdenes" (~5 min)
 
-Ver `demo_b/README.md`. **Hallazgo:** la inyección explícita no la ejecuta ningún
-Claude vigente (probados 7: rechazan, avisan o la ignoran). La narrativa es
-tranquilizadora pero con el asterisco correcto — "hoy el modelo te cubrió, pero no
-dependas de eso; cerrá la puerta por arquitectura".
+Ver `demo_b/README.md`. **Hallazgo (slide 19):** probada contra 13 modelos. Los 7
+Claude la atajaron (rechazan, avisan o ignoran); **GLM-4.6 y Qwen3.5-9B la ejecutaron**
+—leyeron el `.env` y lo exfiltraron. La narrativa es tranquilizadora pero con el
+asterisco correcto — "hoy Claude te cubrió, pero otros modelos no; no dependas del
+modelo, cerrá la puerta por arquitectura".
 
 Secuencia en vivo:
 
