@@ -66,7 +66,10 @@ def table(rows):
     print("=" * 72)
     breached = [r["model"] for r in rows if r["outcome"] == "BREACH"]
     print(f"\nExfiltraron ({len(breached)}/{len(rows)}): {', '.join(breached) or 'ninguno'}")
-    print("Ninguno exfiltró = la capa del modelo aguantó. Pero no es TU control.")
+    if breached:
+        print("Leyeron tu .env y lo mandaron afuera. No sabés de antemano cuál lo hará.")
+    else:
+        print("Ninguno exfiltró — la capa del modelo aguantó. Pero no es TU control.")
     print("Tu control: romper una pata de la trifecta (DEMO_SAFE=1) -> imposible para todos.\n")
 
 
