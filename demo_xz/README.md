@@ -33,6 +33,43 @@ printf 'x\xf3\x0f\x1e\xfa\x55\x48\x89\xf5\x4c\x89\xce\x53\x89\xfb\x81\xe7\x00\x0
 ./detect.sh /tmp/vuln.so    # 🔴
 ```
 
+## Parte 2 (opcional, más fuerte): entrar por el backdoor — `backdoor/`
+
+El detector muestra que *estaba ahí*; esto muestra *qué se puede hacer*. Un sshd de
+juguete importa una "liblzma" con un hook escondido y **keyed**; el atacante manda
+un payload firmado en el handshake y ejecuta comandos **pre-autenticación, como root**.
+
+```bash
+cd backdoor
+docker build -t xz-backdoor .
+docker run --rm xz-backdoor      # login normal → denegado; atacante → shell root pre-auth
+```
+
+Salida clave:
+```
+=== Cliente normal (no tiene la clave del atacante) ===
+acceso denegado: credenciales invalidas
+=== Atacante: payload firmado escondido en el handshake ===
+[backdoor] comando ejecutado pre-auth, como root:
+uid=0(root) gid=0(root) groups=0(root)
+```
+
+Interactivo (si querés tipear el comando en vivo):
+```bash
+docker run --rm -it xz-backdoor bash
+# dentro del container:
+python3 sshd_toy.py serve &
+python3 sshd_toy.py attack "id; cat /etc/shadow"   # RCE como root, sin login
+python3 sshd_toy.py login s3cr3t                   # el login normal, para contrastar
+```
+
+**Honestidad (decilo en la charla):** es una *simulación del mecanismo*, no el binario
+real de XZ. El real hookea `RSA_public_decrypt` vía IFUNC y verifica una firma **ED448**
+del atacante (x86-64). Acá reproducimos lo que importa —**keyed, pre-auth, RCE, escondido
+en una dependencia**— con HMAC de la stdlib para que corra offline en cualquier máquina.
+Lo *keyed* es fiel y clave: por eso XZ no se explotó masivamente — solo el dueño de la
+clave podía disparar el backdoor.
+
 ## El cierre (encaja en el bloque de supply chain)
 
 "No lo encontró un scanner ni un code review: lo encontró un ingeniero que

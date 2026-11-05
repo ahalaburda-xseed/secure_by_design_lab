@@ -116,17 +116,29 @@ Refuerza el hook de apertura y el bloque de supply chain. **Opcional: solo si va
 bien de tiempo** (ya hay 2 demos sólidas en 60 min). Reproduce el *momento del
 descubrimiento* de CVE-2024-3094, no el backdoor. Ver `demo_xz/README.md`.
 
+**(a) Detección** — mostró que la firma *estaba ahí*:
 ```bash
 cd demo_xz
 docker build -t xz-demo .      # hacelo ANTES de la charla (baja la imagen base)
 docker run --rm xz-demo        # 🟢 versión previa buena  →  🔴 v5.6.1 con la firma
 ```
 
+**(b) Entrar por el backdoor** — qué se puede *hacer* con él (el momento fuerte):
+```bash
+cd demo_xz/backdoor
+docker build -t xz-backdoor .
+docker run --rm xz-backdoor    # login normal → denegado; atacante → uid=0(root) PRE-auth
+```
+"El atacante no adivinó la contraseña: la saltó. RCE como root antes de autenticar,
+y sshd nunca fue tocado — el backdoor vivía en la 'liblzma' que importa."
+
 "No lo encontró un scanner ni un code review: una firma en el binario compilado.
 El riesgo vivía en una dependencia transitiva, antes de tu producción. Por eso
 el A03 del OWASP 2025 es Supply Chain." Fixtures de mentira, 100% offline.
 
-> Preparación: `docker build` una vez antes de la charla. El `run` es offline.
+> Preparación: `docker build` de ambas imágenes antes de la charla. Los `run` son offline.
+> La parte (b) es una **simulación del mecanismo** (HMAC en vez de la firma ED448 real),
+> no el binario de XZ — decilo. Lo fiel: keyed, pre-auth, RCE, escondido en una dependencia.
 
 ---
 
