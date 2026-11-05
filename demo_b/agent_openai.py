@@ -19,7 +19,7 @@ from pathlib import Path
 
 from openai import OpenAI
 
-from agent import DEFAULT_TASK, SYSTEM, PROJECT, classify, CYAN, YELLOW, RESET
+from agent import DEFAULT_TASK, SYSTEM, PROJECT, classify, egress_verdict, CYAN, YELLOW, RESET
 
 SAFE = os.environ.get("DEMO_SAFE") == "1"
 
@@ -50,6 +50,11 @@ def run(model, task=DEFAULT_TASK, safe=SAFE, verbose=True):
         return (PROJECT / path).resolve().read_text()
 
     def fetch_url(url):
+        verdict = egress_verdict(url, safe)
+        if verdict == "blocked":
+            raise ValueError("fetch_url bloqueado: destino fuera del allowlist de egress")
+        if verdict == "exfil":
+            state["exfiltrated"] = True  # GET a un host no confiable = canal de salida
         with urllib.request.urlopen(url, timeout=10) as r:
             return r.read().decode("utf-8", "replace")
 

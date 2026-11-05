@@ -1,7 +1,7 @@
 # Runbook de demos — Secure by Design (05/11)
 
 Dos demos. A corre en GitHub Actions (nube, gratis) + CLI local de fallback.
-B es 100% local. **Railway no hace falta** para ninguna (ver abajo).
+B es local salvo la llamada al modelo (API). **Railway no hace falta** para ninguna (ver abajo).
 
 ---
 
@@ -24,6 +24,10 @@ Checklist del guion que sigue vigente:
 - [ ] `trivy image --download-db-only` la mañana de la charla (DB de CVEs fresca)
 - [ ] Probar que el secreto falso elegido **sí** dispara gitleaks (ver Demo A, paso 1)
 - [ ] Ensayar la Demo B 3 veces; si falla 1 de 3, tener grabación de backup
+- [ ] `export OPENROUTER_API_KEY=...` y `ANTHROPIC_API_KEY=...` en la terminal de Demo B
+- [ ] Confirmar que el pre-commit hook de gitleaks está instalado (`pre-commit install`)
+- [ ] `.env` NO está en `.gitignore` (la Demo A lo necesita stageable); verificar antes
+- [ ] Guardar `results.json` de una corrida buena con fecha (para no correr 17 modelos en vivo)
 - [ ] Terminal a 20pt+, tema claro
 
 ---
@@ -80,11 +84,14 @@ checkov -d infra/ --compact
 
 ## Demo B — "El README que da órdenes" (~5 min)
 
-Ver `demo_b/README.md`. **Hallazgo (slide 19):** probada contra 17 modelos. Los 7
-Claude la atajaron; **GPT-4o-mini, GLM-4.6 y Qwen3.5-9B la ejecutaron** —leyeron el
-`.env` y lo exfiltraron (3 proveedores, los modelos más chicos/viejos; los flagships
-aguantaron). La narrativa es tranquilizadora con el asterisco correcto — "hoy Claude
-te cubrió, pero otros no; no dependas del modelo, cerrá la puerta por arquitectura".
+Ver `demo_b/README.md`. **Hallazgo (slide 20), acotado — no una ley:** en nuestras
+corridas, los Claude que probamos la atajaron; varios modelos más chicos/viejos la
+ejecutaron —leyeron el `.env` y lo exfiltraron— de **4 proveedores** (OpenAI, Google,
+Zhipu, Alibaba): según la corrida, GPT-4o-mini, Gemini-2.5-flash-lite, GLM-4.6,
+Qwen3.5-9B. La narrativa es tranquilizadora con el asterisco correcto — "esta vez el
+modelo te cubrió, pero no es tu garantía; no dependas del modelo, cerrá la puerta por
+arquitectura". ⚠️ No decir "Claude es inmune": con otra arquitectura/payload un frontier
+model también se filtra (p.ej. GitHub MCP). Mostrar `results.json` guardado con fecha.
 
 Terminal 1 (queda arriba toda la demo): `cd demo_b && python3 servers.py`
 Terminal 2 (necesita `OPENROUTER_API_KEY` exportada):
@@ -96,8 +103,11 @@ Terminal 2 (necesita `OPENROUTER_API_KEY` exportada):
    atajan, varios modelos más chicos/viejos lo filtran. "Claude te cubrió — pero no
    podés depender de eso: otro modelo, provider o payload cae."
 3. **La mitigación (sólida).** `DEMO_SAFE=1 python3 agent_openai.py z-ai/glm-4.6` → lee
-   el `.env` pero no tiene `http_post`: no puede sacarlo. Imposible para cualquier modelo.
-   Esa pata rota es TU control.
+   el `.env` pero la pata de salida está rota ENTERA: sin `http_post` **y** con `fetch_url`
+   restringido a un allowlist (sólo el README confiable). No puede sacarlo a ningún lado,
+   pase lo que pase el modelo. Punto fino que podés mencionar: sacar sólo `http_post` NO
+   alcanza — `fetch_url` a una URL arbitraria exfiltra por la query (GET). Esa pata rota
+   del todo es TU control.
 
 Opcional: `python3 agent.py` (Claude opus-5-5) → `refusal` en vivo, para mostrar que el
 frontier model lo ataja. Pero el cierre es el mismo: no dependas del modelo.
@@ -145,9 +155,10 @@ el A03 del OWASP 2025 es Supply Chain." Fixtures de mentira, 100% offline.
 ## ¿Por qué no Railway?
 
 - **Demo A** corre en GitHub Actions (nube, gratis) + CLI local. No hay app que hostear.
-- **Demo B** es a propósito 100% localhost (el guion lo pide): el README malicioso y
-  el listener del atacante viven en `localhost:8000/8080`. Hostearlo afuera agrega
-  dependencia de red (el guion dice "no depender del WiFi") y nada de valor.
+- **Demo B**: los servidores y archivos viven 100% en localhost a propósito (el guion
+  lo pide) — el README malicioso y el listener del atacante en `localhost:8000/8080`.
+  Lo único que sale a la red es la llamada al modelo (API). Hostear los servers afuera
+  agrega dependencia de red (el guion dice "no depender del WiFi") y nada de valor.
 
 Si igual querés algo desplegado (p.ej. mostrar la Flask app vulnerable corriendo),
 se puede subir `demo/risky-change` a Railway en 2 min — pero no es necesario para
