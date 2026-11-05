@@ -83,6 +83,7 @@ Este es el mapa que se recorre en 2.2–2.8: cada caja es una slide con su caso 
 - Arrancó días después de una campaña de phishing que se hacía pasar por npm pidiendo "actualizar el MFA". "Otra vez: ingeniería social, ahora contra maintainers."
 - Shai-Hulud 2.0, noviembre 2025: corre en preinstall (antes, y más peligroso), y en pocos días afectó a decenas de miles de devs/repos, con paquetes de Zapier, PostHog, Postman y AsyncAPI.
 - Volver a XZ: OWASP subió "Software Supply Chain Failures" al puesto #3 del Top 10 2025, categoría nueva.
+- Binance, 29 oct 2026 (slide, caso con número grande): ~US$6.3B, el mayor robo cripto de la historia. Causa raíz: un ingeniero de Wallet DevOps instaló un Homebrew troyanizado para montar una herramienta de IA de coding; backdoor en la laptop → acceso a la infra de firma de la hot wallet → retiros no autorizados. Atribuido a Corea del Norte (TraderTraitor). "No fue producción: fue la máquina de un dev instalando una tool. Como nosotros." Verificar: el reporte de Binance confirma ~98% de activos repuestos al 31/10.
 
 **Controles:** lockfile siempre commiteado y `npm ci` en CI · `--ignore-scripts` donde se pueda · cooldown de versiones nuevas (no instalar algo publicado hace 2 horas) · SCA en cada PR (Trivy, Dependabot, Renovate) · SBOM para saber qué corre · MFA fuerte y trusted publishing en npm/PyPI si mantenemos paquetes.
 
@@ -286,6 +287,7 @@ Revisar cada cifra contra su fuente antes de pasarla al deck.
 - **XZ Utils (CVE-2024-3094):** Wikipedia · runZero · Intruder
 - **Secrets:** GitGuardian, State of Secrets Sprawl 2026 (dev.to) · The Hacker News · CPO Magazine · HackerNoon (3.2% vs 1.5%)
 - **Shai-Hulud:** Flashpoint · Krebs on Security · Intel 471 (PDF) · SafeDep (2.0) · HackMag (2.0, preinstall)
+- **Binance (29/10/2026):** Binance incident report (29 Oct) · TRM Labs (TraderTraitor/DPRK, "largest hack in history") · The Hacker News · Wikipedia "2026 Binance hack" · TechCrunch · CNBC
 - **tj-actions (CVE-2025-30066):** Wiz · GitHub Advisory · Infosecurity Magazine
 - **Snowflake / UNC5537:** TechTarget · The Hacker News · SC Magazine
 - **OWASP:** Top 10:2025 · The Register · CPO Magazine (LLM Top 10)
