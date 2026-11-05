@@ -46,8 +46,15 @@ class CollectHandler(http.server.BaseHTTPRequestHandler):
 
 
 def serve(port, handler):
+    socketserver.TCPServer.allow_reuse_address = True
     with socketserver.TCPServer(("127.0.0.1", port), handler) as httpd:
         httpd.serve_forever()
+
+
+def start_background():
+    """Start both servers as daemon threads (for compare.py, which drives everything)."""
+    threading.Thread(target=serve, args=(8000, ReadmeHandler), daemon=True).start()
+    threading.Thread(target=serve, args=(8080, CollectHandler), daemon=True).start()
 
 
 if __name__ == "__main__":

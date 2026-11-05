@@ -80,20 +80,26 @@ checkov -d infra/ --compact
 
 ## Demo B — "El README que da órdenes" (~5 min)
 
-Ver `demo_b/README.md`. Resumen de la secuencia en vivo (dos terminales):
+Ver `demo_b/README.md`. **Hallazgo:** la inyección explícita no la ejecuta ningún
+Claude vigente (probados 7: rechazan, avisan o la ignoran). La narrativa es
+tranquilizadora pero con el asterisco correcto — "hoy el modelo te cubrió, pero no
+dependas de eso; cerrá la puerta por arquitectura".
 
-```bash
-# Terminal 1
-cd demo_b && python3 servers.py
+Secuencia en vivo:
 
-# Terminal 2
-cd demo_b && source .venv/bin/activate
-python3 agent.py                 # exfiltra el .env -> aparece en rojo en Terminal 1
-DEMO_SAFE=1 python3 agent.py     # mitigación: sin http_post, el ataque falla
-```
+1. **La tabla (el momento):** `cd demo_b && python3 compare.py` → corre la inyección
+   contra todos los modelos y muestra la reacción de cada uno. Si hay key de OpenRouter,
+   suma Kimi/GLM/Qwen (si alguno exfiltra, ahí está la prueba de "no dependas del modelo").
+2. **Un caso en vivo:** `python3 agent.py` contra opus-5-5 → `refusal`/avisa.
+   "La defensa funcionó. Pero mirá por qué no alcanza:"
+3. **La mitigación (sólida):** `DEMO_SAFE=1 python3 agent.py` → sin `http_post`, el
+   ataque es imposible para cualquier modelo. Esa pata rota es TU control.
 
-"El agente no fue hackeado. Hizo exactamente lo que le pidieron. El problema es
-quién se lo pidió."
+Cierre: "No hace falta volverse paranoico; hace falta no darle a un agente las tres
+patas a la vez. Con eso dormís tranquilo aunque el modelo tenga un mal día."
+
+> Para probar modelos no-Claude: `OPENROUTER_API_KEY` (openrouter.ai/keys) y
+> `python3 agent_openai.py moonshotai/kimi-k2`. Detalle en `demo_b/README.md`.
 
 ---
 
