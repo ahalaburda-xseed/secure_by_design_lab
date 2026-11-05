@@ -51,6 +51,8 @@ Abrimos con XZ Utils: el backdoor con CVSS 10 que casi llega a todos los servido
 
 > Verificar antes: la cifra exacta de la demora de SSH que notó Freund (se suele citar ~500 ms) en su post original de oss-security.
 
+> **Demo opcional (`demo_xz/`):** si vas bien de tiempo, acá o en el bloque de supply chain (2.3) podés correr el detector del disclosure en vivo — `cd demo_xz && docker build -t xz-demo . && docker run --rm xz-demo` → 🟢 en la versión previa, 🔴 en la 5.6.1. Refuerza que no lo encontró un code review sino una firma en el binario compilado. Si vas justo de tiempo, XZ se queda como hook hablado y listo.
+
 ## Bloque 2 (0:05–0:29) — Secure SDLC: dónde entra cada vulnerabilidad
 
 Recorremos el ciclo de vida etapa por etapa; en cada una, un caso real de 2024–2025, por qué nadie lo vio y el control que lo hubiera frenado. Total ~24 min.

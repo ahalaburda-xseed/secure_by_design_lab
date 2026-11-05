@@ -110,6 +110,26 @@ patas a la vez. Con eso dormís tranquilo aunque el modelo tenga un mal día."
 
 ---
 
+## Demo XZ (opcional) — "medio segundo de más" (~2 min)
+
+Refuerza el hook de apertura y el bloque de supply chain. **Opcional: solo si vas
+bien de tiempo** (ya hay 2 demos sólidas en 60 min). Reproduce el *momento del
+descubrimiento* de CVE-2024-3094, no el backdoor. Ver `demo_xz/README.md`.
+
+```bash
+cd demo_xz
+docker build -t xz-demo .      # hacelo ANTES de la charla (baja la imagen base)
+docker run --rm xz-demo        # 🟢 versión previa buena  →  🔴 v5.6.1 con la firma
+```
+
+"No lo encontró un scanner ni un code review: una firma en el binario compilado.
+El riesgo vivía en una dependencia transitiva, antes de tu producción. Por eso
+el A03 del OWASP 2025 es Supply Chain." Fixtures de mentira, 100% offline.
+
+> Preparación: `docker build` una vez antes de la charla. El `run` es offline.
+
+---
+
 ## ¿Por qué no Railway?
 
 - **Demo A** corre en GitHub Actions (nube, gratis) + CLI local. No hay app que hostear.
