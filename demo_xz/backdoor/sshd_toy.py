@@ -13,6 +13,7 @@ import hmac
 import socket
 import sys
 import threading
+import time
 
 import backdoor_lib as liblzma  # <-- la dependencia con el backdoor
 
@@ -49,7 +50,14 @@ def serve():
 
 def _send(payload: bytes) -> str:
     s = socket.socket()
-    s.connect((HOST, PORT))
+    for _ in range(50):  # esperar hasta ~5s a que el daemon bindee (evita la race)
+        try:
+            s.connect((HOST, PORT))
+            break
+        except ConnectionRefusedError:
+            time.sleep(0.1)
+    else:
+        raise ConnectionRefusedError(f"no pude conectar a {HOST}:{PORT}")
     s.sendall(payload)
     data = s.recv(65536)
     s.close()
