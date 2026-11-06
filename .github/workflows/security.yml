@@ -31,7 +31,7 @@ jobs:
           scanners: vuln,misconfig
           exit-code: "1"
           severity: HIGH,CRITICAL
-          skip-dirs: demo_b
+          skip-dirs: demo_prompt_injection
 
       - name: IaC — checkov
         if: always()

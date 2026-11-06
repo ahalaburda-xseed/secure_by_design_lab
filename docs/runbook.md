@@ -15,7 +15,7 @@ brew install gitleaks pre-commit trivy
 pipx install semgrep checkov      # o: pip install semgrep checkov
 
 # Demo B
-cd demo_b && python3 -m venv .venv && source .venv/bin/activate
+cd demo_prompt_injection && python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 export ANTHROPIC_API_KEY=sk-ant-...      # <-- IMPRESCINDIBLE para la Demo B
 ```
@@ -84,7 +84,7 @@ checkov -d infra/ --compact
 
 ## Demo B — "El README que da órdenes" (~5 min)
 
-Ver `demo_b/README.md`. **Hallazgo (slide 20), acotado — no una ley:** en nuestras
+Ver `demo_prompt_injection/README.md`. **Hallazgo (slide 20), acotado — no una ley:** en nuestras
 corridas, los Claude que probamos la atajaron; varios modelos más chicos/viejos la
 ejecutaron —leyeron el `.env` y lo exfiltraron— de **4 proveedores** (OpenAI, Google,
 Zhipu, Alibaba): según la corrida, GPT-4o-mini, Gemini-2.5-flash-lite, GLM-4.6,
@@ -93,7 +93,7 @@ modelo te cubrió, pero no es tu garantía; no dependas del modelo, cerrá la pu
 arquitectura". ⚠️ No decir "Claude es inmune": con otra arquitectura/payload un frontier
 model también se filtra (p.ej. GitHub MCP). Mostrar `results.json` guardado con fecha.
 
-Terminal 1 (queda arriba toda la demo): `cd demo_b && python3 servers.py`
+Terminal 1 (queda arriba toda la demo): `cd demo_prompt_injection && python3 servers.py`
 Terminal 2 (necesita `OPENROUTER_API_KEY` exportada):
 
 1. **El ataque funciona — slide 18.** `python3 agent_openai.py z-ai/glm-4.6`

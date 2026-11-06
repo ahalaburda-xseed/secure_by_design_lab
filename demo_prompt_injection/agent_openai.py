@@ -109,6 +109,6 @@ def run(model, task=DEFAULT_TASK, safe=SAFE, verbose=True):
 
 if __name__ == "__main__":
     if not API_KEY:
-        sys.exit("falta OPENROUTER_API_KEY (o OPENAI_API_KEY). Ver demo_b/README.md")
+        sys.exit("falta OPENROUTER_API_KEY (o OPENAI_API_KEY). Ver demo_prompt_injection/README.md")
     model = sys.argv[1] if len(sys.argv) > 1 else "moonshotai/kimi-k2"
     run(model)

@@ -2,7 +2,7 @@ __pycache__/
 *.pyc
 .venv/
 *.db
-demo_b/results.json
+demo_prompt_injection/results.json
 
 # NOTE: .env is deliberately NOT ignored here. Demo A commits a fake secret live
 # to show gitleaks blocking it. In a real project, .env belongs in .gitignore.

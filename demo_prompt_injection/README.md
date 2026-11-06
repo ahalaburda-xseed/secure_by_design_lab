@@ -32,7 +32,7 @@ Mensaje para los devs, con el asterisco correcto:
 ## Setup
 
 ```bash
-cd demo_b
+cd demo_prompt_injection
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 export ANTHROPIC_API_KEY=sk-ant-...        # modelos Claude
