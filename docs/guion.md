@@ -218,7 +218,7 @@ jobs:
 
 > Riesgos de la demo: verificar en el ensayo que la regla de Semgrep realmente marque ese patrón (si no, usar `sqlite3` con `cursor.execute`, que sí lo cubre) y que Trivy reporte esos CVEs con la DB del día.
 
-### Demo B — "El README que da órdenes" (~5 min)
+### Demo Prompt Injection — "El README que da órdenes" (~5 min)
 
 Setup (100% local, nada real):
 
